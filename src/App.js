@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-function App() {
+function App () {
+  const [countries, setCountries] = useState([])
+
+  useEffect(() => {
+    axios.get('https://api.covid19api.com/countries')
+      .then(response => {
+        const newCountries = response.data
+        newCountries.sort((a, b) => {
+          if (a.Country > b.Country) {
+            return 1
+          } else if (b.Country > a.Country) {
+            return -1
+          } else {
+            return 0
+          }
+        })
+        setCountries(newCountries)
+      })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h1>Countries</h1>
+      <ul>
+        {countries.map(country => (
+          <li key={country.Slug}>{country.Country}</li>
+        ))}
+      </ul>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
