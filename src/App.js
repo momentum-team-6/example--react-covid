@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import 'tachyons'
+import CountryData from './components/CountryData'
+import CountryList from './components/CountryList'
 
 function App () {
   const [countries, setCountries] = useState([])
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     axios.get('https://api.covid19api.com/countries')
@@ -22,13 +26,12 @@ function App () {
   }, [])
 
   return (
-    <div className='App'>
-      <h1>Countries</h1>
-      <ul>
-        {countries.map(country => (
-          <li key={country.Slug}>{country.Country}</li>
-        ))}
-      </ul>
+    <div className='App mw8 center mv3 ph3 sans-serif'>
+      <h1 className='pa2 bg-orange white'>COVID-19 Data Explorer</h1>
+      {selectedCountry
+        ? <CountryData country={selectedCountry} handleGoBack={() => setSelectedCountry(null)} />
+        : <CountryList countries={countries} setSelectedCountry={setSelectedCountry} />}
+
     </div>
   )
 }
