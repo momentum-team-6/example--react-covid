@@ -44,6 +44,7 @@ function generateDataWithUniqueDates (originalData) {
   return stats
 }
 function CountryData ({ country, handleGoBack }) {
+  const [loading, setLoading] = useState(true)
   const [countryData, setCountryData] = useState([])
 
   useEffect(() => {
@@ -65,6 +66,7 @@ function CountryData ({ country, handleGoBack }) {
           return response
         })
         setCountryData(data)
+        setLoading(false)
       })
   }, [country])
 
@@ -89,7 +91,7 @@ function CountryData ({ country, handleGoBack }) {
       </h2>
 
       {countryData.length === 0
-        ? (<div>No data for this country.</div>)
+        ? (loading ? <div>...</div> : <div>No data for this country.</div>)
         : (
           <>
             <div className='flex mv4 justify-around'>
@@ -105,11 +107,18 @@ function CountryData ({ country, handleGoBack }) {
               theme={VictoryTheme.material}
               width={800}
               height={400}
+              padding={{ top: 20, left: 50, right: 50, bottom: 50 }}
             >
               <VictoryLine
                 x='date'
                 y='new'
                 data={countryData}
+                interpolation='natural'
+                style={
+                  {
+                    data: { stroke: '#333366' }
+                  }
+                }
               />
             </VictoryChart>
 
