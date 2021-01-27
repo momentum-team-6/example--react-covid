@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import groupBy from 'lodash/groupBy'
 import 'tachyons'
 import CountryData from './components/CountryData'
 import CountryList from './components/CountryList'
@@ -21,7 +22,9 @@ function App () {
             return 0
           }
         })
-        setCountries(newCountries)
+        const countriesByLetter = groupBy(newCountries, (c) => c.Country[0])
+
+        setCountries(countriesByLetter)
       })
   }, [])
 
