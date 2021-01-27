@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import format from 'date-fns/format'
+import StatBox from './StatBox'
 
 function CountryData ({ country, handleGoBack }) {
   const [countryData, setCountryData] = useState([])
 
   useEffect(() => {
-    axios.get(`https://api.covid19api.com/live/country/${country.Slug}`)
+    axios.get(`https://api.covid19api.com/dayone/country/${country.Slug}`)
       .then(response => {
         const data = response.data.map(dataByDay => (
           {
@@ -22,31 +23,37 @@ function CountryData ({ country, handleGoBack }) {
       })
   }, [country])
 
+  const dateOfFirstCase = countryData[0].date
+  const currentCases = countryData[countryData.length - 1]
+
   return (
     <div>
-      <h2>{country.Country}</h2>
+      <h2>
+        {country.Country}
+        <div className='dib ml2 f5'>
+          <button
+            className='pa0 bw0 bg-white blue pointer underline-hover'
+            onClick={handleGoBack}
+          >
+            Back to all countries
+          </button>
+        </div>
+      </h2>
 
-      <button
-        className='pa0 bw0 bg-white blue pointer underline-hover'
-        onClick={handleGoBack}
-      >
-        Back to all countries
-      </button>
+      <div className='flex mv4 justify-around'>
+        <StatBox label='First case' stat={format(dateOfFirstCase, 'LLL d, yyyy')} />
+        <StatBox label='Current cases' stat={currentCases.active.toLocaleString()} />
+        <StatBox label='Recovered cases' stat={currentCases.recovered.toLocaleString()} />
+      </div>
 
       <ul>
         {countryData.map(dataByDay => (
           <li key={dataByDay.id}>
-            {format(dataByDay.date, 'LLL d, yyyy')}
-            <dl>
-              <dt>Confirmed</dt>
-              <dd>{dataByDay.confirmed}</dd>
-              <dt>Active</dt>
-              <dd>{dataByDay.active}</dd>
-              <dt>Recovered</dt>
-              <dd>{dataByDay.recovered}</dd>
-              <dt>Deaths</dt>
-              <dd>{dataByDay.deaths}</dd>
-            </dl>
+            <div>{format(dataByDay.date, 'LLL d, yyyy')}</div>
+            <div>Confirmed: {dataByDay.confirmed}</div>
+            <div>Active: {dataByDay.active}</div>
+            <div>Recovered: {dataByDay.recovered}</div>
+            <div>Deaths: {dataByDay.deaths}</div>
           </li>
         ))}
       </ul>
