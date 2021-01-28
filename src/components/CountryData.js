@@ -17,6 +17,7 @@ function CountryData ({ country, handleGoBack }) {
   useEffect(() => {
     getCountryData(country)
       .then(data => {
+        console.log({ data })
         setCountryData(data)
         setLoading(false)
       })

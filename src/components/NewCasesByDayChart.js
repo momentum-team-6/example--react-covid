@@ -1,6 +1,6 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory'
 
-function NewCasesByDayChart (timeline) {
+function NewCasesByDayChart ({ timeline }) {
   return (
     <VictoryChart
       scale={{ x: 'time', y: 'linear' }}
