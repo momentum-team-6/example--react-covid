@@ -1,29 +1,18 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import groupBy from 'lodash/groupBy'
 import 'tachyons'
 import CountryData from './components/CountryData'
 import CountryList from './components/CountryList'
+import { getCountryList } from './api'
 
 function App () {
   const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
-    axios.get('https://api.covid19api.com/countries')
-      .then(response => {
-        const newCountries = response.data
-        newCountries.sort((a, b) => {
-          if (a.Country > b.Country) {
-            return 1
-          } else if (b.Country > a.Country) {
-            return -1
-          } else {
-            return 0
-          }
-        })
-        const countriesByLetter = groupBy(newCountries, (c) => c.Country[0])
-
+    getCountryList()
+      .then(countries => {
+        const countriesByLetter = groupBy(countries, (c) => c.name[0])
         setCountries(countriesByLetter)
       })
   }, [])

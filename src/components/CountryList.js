@@ -12,12 +12,12 @@ function CountryList ({ countries, setSelectedCountry }) {
               <div className='flex-auto'>
                 <ul className='list pl0'>
                   {cs.map(country => (
-                    <li className='mb2 mr2 dib' key={country.Country}>
+                    <li className='mb2 mr2 dib' key={country.code}>
                       <button
                         className='pa0 bw0 bg-white blue pointer underline-hover'
                         onClick={() => setSelectedCountry(country)}
                       >
-                        {country.Country}
+                        {country.name}
                       </button>
                     </li>
                   ))}
