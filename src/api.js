@@ -14,5 +14,6 @@ export function getCountryData (country) {
           ...dataByDay,
           date: new Date(dataByDay.date)
         }))
+      return data
     })
 }
